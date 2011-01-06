@@ -1,0 +1,8 @@
+%h1 Create/Update Category
+
+- form_for @category do |f|
+  = f.error_messages
+  %p
+    Name:
+    = f.text_field :name
+  %p= submit_tag 'Send'

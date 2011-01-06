@@ -1,0 +1,20 @@
+%h1 Products
+
+%p= link_to 'New product', new_product_path
+  
+- unless @products.blank?
+  %table
+    %thead
+      %tr
+        %th Name
+        %th Category
+        %th Price
+    %tbody
+      - for product in @products
+        %tr
+          %td= product
+          %td= product.category
+          %td= product.price
+          %td= link_to 'Edit', edit_product_path( product )
+- else
+  %p There are no products available.

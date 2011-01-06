@@ -1,0 +1,17 @@
+!!! Strict
+%html{:xmlns => "http://www.w3.org/1999/xhtml", :lang => "en", :'xml:lang' => "en"}
+  %head
+    %title Sunspot Tutorial
+    = stylesheet_link_tag :all
+    = javascript_include_tag :defaults
+    = csrf_meta_tag
+  %body
+    - flash.each do |key,value|
+      %p
+        %strong= key.to_s.titleize
+        = ' - '
+        = value
+    %ul
+      %li= link_to 'View Categories', categories_path
+      %li= link_to 'View Products', products_path
+    = yield

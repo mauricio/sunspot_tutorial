@@ -1,0 +1,23 @@
+%h1 Create/Update product
+
+- form_for @product do |f|
+  = f.error_messages
+  
+  %p
+    Name:
+    = f.text_field :name
+    
+  %p
+    Category:
+    = f.select :category_id, Category.all.map { |c| [c.name, c.id]  }
+
+  %p
+    Price:
+    = f.text_field :price
+
+  %p
+    Description:
+    %br
+    = f.text_area :description
+    
+  %p= submit_tag 'Send'
