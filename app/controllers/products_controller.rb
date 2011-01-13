@@ -3,21 +3,35 @@ class ProductsController < ApplicationController
   before_filter :load_model, :only => [ :new, :edit, :create, :update, :destroy ]
   
   def index
+    @page = (params[:page] || 1).to_i
     @products = if params[:q].blank?
-      Product.all :order => 'name ASC'
+      Product.paginate :order => 'name ASC', :per_page => 3, :page => @page
     else
-      Product.solr_search do |s|
+      
+      result = Product.solr_search do |s|
         s.keywords params[:q]
+        unless params[:category_id].blank?
+          s.with( :category_id ).equal_to( params[:category_id].to_i )
+        else
+          s.facet :category_id
+        end
+        s.paginate :per_page => 3, :page => @page
       end
+      
+      if result.facet( :category_id )
+        @facet_rows = result.facet(:category_id).rows  
+      end
+      
+      result
     end
   end
-
+  
   def new
     render :new
   end
-
+  
   alias :edit :new
-
+  
   def create
     if @product.update_attributes( params[:product] )
       flash[:notice] = 'Product successfully created/updated'
@@ -26,6 +40,8 @@ class ProductsController < ApplicationController
       render :new
     end
   end
+  
+  alias :update :create
   
   def destroy
     @product.destroy
