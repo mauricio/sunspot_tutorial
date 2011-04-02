@@ -12,6 +12,12 @@
   
 - unless @products.blank?
 
+  - unless @facet_rows.blank?
+    %h3 Filters
+    - @facet_rows.each do |facet|
+      %p= link_to( "#{facet.instance} (#{facet.count})", products_path( :q => params[:q], :category_id => facet.instance.id ) )
+  - if @category
+    %p= "Showing results for category #{@category}"
 
   = will_paginate @products
   %table

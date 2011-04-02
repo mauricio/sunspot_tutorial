@@ -22,6 +22,10 @@ class ProductsController < ApplicationController
         @facet_rows = result.facet(:category_id).rows  
       end
       
+      unless params[:category_id].blank?
+        @category = Category.find( params[:category_id] )
+      end
+      
       result
     end
   end
